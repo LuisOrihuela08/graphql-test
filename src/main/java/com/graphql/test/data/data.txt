@@ -1,0 +1,8 @@
+INSERT INTO courses (name, category, teacher) VALUES ('Matematicas', 'Ciencias exactas','Juan Diego Ossa'),
+													 ('Biologia', 'Ciencias', 'Leandro Jaramillo'),
+                                                     ('Programacion', 'Tecnologia', 'Luis Orihuela');
+ 
+INSERT INTO students (name, last_name, age, course_id) VALUES ('John', 'Serna', 26, 1),
+															  ('Andrea', 'Calle', 21, 2),
+                                                              ('Angie', 'Hoyos', 22, 1),
+                                                              ('Santiago', 'Perez', 24, 3);

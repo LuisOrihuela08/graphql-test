@@ -1,0 +1,49 @@
+#El query me sirve solo para hacer consultas
+type Query{
+	#Students
+	findStudentById(studentId: String): Student,
+	findAllStudents: [Student]
+	
+	#Course
+	findCourseById(courseId: String): Course,
+	findAllCourses: [Course]
+}
+
+type Mutation{
+	#Student
+	createStudent(inputStudent: InputStudent!): Student,
+	deleteStudentById(studentId: String): String
+	
+	#Course
+	createCourse(inputCourse: InputCourse!): Course,
+	deleteCourseById(courseId: String): String
+}
+
+type Student{
+	id: ID,
+	name: String,
+	lastName: String,
+	edad: Int,
+	course: Course
+}
+
+input InputStudent{
+	id: ID,
+	name: String,
+	lastName: String,
+	edad: Int,
+	courseId: Int!
+}
+
+type Course {
+	id: ID,
+	name: String,
+	category: String,
+	teacher: String
+}
+
+input InputCourse{
+	name: String,
+	category: String,
+	teacher: String
+}
