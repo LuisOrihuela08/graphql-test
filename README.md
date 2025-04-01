@@ -12,7 +12,7 @@ Como ejecutar una prueba de GraphQL
 
 ## GraphiQL
 A traves de la URL: http://localhost:8080/graphIql
-![Image](https://github.com/user-attachments/assets/85cf309f-fc29-4010-bc59-4e88a617d2a7)
+![Image](https://github.com/user-attachments/assets/b4ad9937-0c04-46ff-988d-2f4535b1a226)
 
 ## Postman
 A traves de la URL: http://localhost:8080/graphql
