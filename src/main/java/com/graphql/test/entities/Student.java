@@ -62,7 +62,8 @@ public class Student {
 		return "Student [id=" + id + 
 				", name=" + name + 
 				", lastName=" + lastName + 
-				", edad=" + edad + "]";
+				", edad=" + edad + 
+				", course=" + course + "]";
 	}
 	
 	

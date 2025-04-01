@@ -2,10 +2,12 @@
 type Query{
 	#Students
 	findStudentById(studentId: String): Student,
+	findStudentByLastName(lastName: String): [Student],
 	findAllStudents: [Student]
 	
 	#Course
 	findCourseById(courseId: String): Course,
+	findCourseByName(name: String): Course,
 	findAllCourses: [Course]
 }
 
