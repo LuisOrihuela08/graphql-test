@@ -35,4 +35,9 @@ public class CourseService {
 	public Optional<Course> findCourseByName(String name){
 		return courseRepository.findByName(name);
 	}
+	
+	//Buscar curso por profesor
+	public List<Course> findCourseByTeacher(String teacher){
+		return courseRepository.findByTeacher(teacher);
+	}
 }
