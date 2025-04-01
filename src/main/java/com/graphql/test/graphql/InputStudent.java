@@ -1,6 +1,5 @@
 package com.graphql.test.graphql;
 
-import jakarta.persistence.Column;
 
 public class InputStudent {
 
