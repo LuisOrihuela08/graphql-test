@@ -68,6 +68,28 @@ public class GraphQLCourseController {
 		}
 	}
 	
+	//Buscar por profesor
+	@QueryMapping(name = "findCourseByTeacher")
+	public List<Course> findByTeacher(@Argument (name = "teacher") String teacher){
+		
+		try {
+			
+			List<Course> listCourse = courseService.findCourseByTeacher(teacher);
+			
+			if (listCourse.isEmpty()) {
+				logger.error("El docente: {}", teacher, "{} no tiene asignado cursos");
+				throw new RuntimeException("El profesor no tiene asignando cursos");
+			}
+			
+			logger.info("El profesor {} tiene asignado los cursos: {}", teacher, listCourse);
+			return listCourse;
+			
+		} catch (Exception e) {
+			logger.error("Error al filtrar los cursos por profesor", e);
+			throw new RuntimeException("ERROR AL LISTAR CURSOS POR PROFESOR" + e.getMessage());
+		}
+	}
+	
 	@QueryMapping(name = "findAllCourses")
 	public List<Course> findAll(){
 		
@@ -98,7 +120,7 @@ public class GraphQLCourseController {
 			
 			courseService.saveCourse(course);
 			
-			logger.info("Course creado con éxito: {}", course);
+			logger.info("Curso creado con éxito: {}", course);
 			return course;
 			
 			

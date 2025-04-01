@@ -8,6 +8,7 @@ type Query{
 	#Course
 	findCourseById(courseId: String): Course,
 	findCourseByName(name: String): Course,
+	findCourseByTeacher(teacher: String): [Course],
 	findAllCourses: [Course]
 }
 
