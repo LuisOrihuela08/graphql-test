@@ -11,12 +11,14 @@ spring:
   config:
     activate:
       on-profile: dev
+    import: optional:file:.env[.properties]
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: luisorihuela1992
-    url: jdbc:mysql://localhost:3306/spring_graphql
-    username: root
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://localhost:3306/${MYSQL_DATABASE}
+    
   jpa:
     hibernate:
       ddl-auto: update
