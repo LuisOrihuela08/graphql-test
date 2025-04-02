@@ -5,6 +5,7 @@ Este proyecto tiene tanto ejemplos de Query como de Mutations.
 
 ## Tecnologias usadas
 - **MySQL**
+- **GraphQL**
 - **Java 17**
 - **Spring Boot**
 
