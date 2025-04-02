@@ -131,6 +131,35 @@ public class GraphQLCourseController {
 				
 	}
 	
+	@MutationMapping
+	public Course updateCourse(@Argument InputCourse inputCourse) {
+		
+		try {
+			
+			Optional<Course> courseOptional = courseService.findCourseById(inputCourse.getId());
+			
+			if (courseOptional.isEmpty()) {
+				logger.error("Error, curso no encontrado con el id: {}", inputCourse.getId());
+				throw new RuntimeException("Curso no encontrado");
+			}
+			
+			Course course = courseOptional.get();
+			course.setCategory(inputCourse.getCategory());
+			course.setName(inputCourse.getName());
+			course.setTeacher(inputCourse.getTeacher());
+			
+			courseService.saveCourse(course);
+			
+			logger.info("Curso actualizado: {}", course);
+			return course;			
+			
+		} catch (Exception e) {
+			logger.error("Error al actualizar el Curso", e);
+			throw new RuntimeException("ERROR AL ACTUALIZAR EL CURSO " + e.getMessage());
+		}
+	}
+	
+	
 	@MutationMapping(name = "deleteCourseById")
 	public String deleteById(@Argument(name = "courseId") String id) {
 		

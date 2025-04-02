@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import com.graphql.test.entities.Course;
 import com.graphql.test.entities.Student;
 import com.graphql.test.graphql.InputStudent;
+import com.graphql.test.repository.CourseRepository;
 import com.graphql.test.service.CourseService;
 import com.graphql.test.service.StudentService;
 
@@ -24,61 +25,63 @@ public class GraphQLStudentController {
 
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private CourseRepository courseRepository;
 
 	@Autowired
 	private StudentService studentService;
 
 	@QueryMapping(name = "findStudentById")
 	public Student findById(@Argument(name = "studentId") String id) {
-		
+
 		try {
 			Long studentId = Long.parseLong(id);
-			
+
 			Optional<Student> studentOptional = studentService.findStudentById(studentId);
-			
+
 			if (studentOptional.isEmpty()) {
-				 throw new RuntimeException("Estudiante no encontrado con el id: " + studentId);
+				throw new RuntimeException("Estudiante no encontrado con el id: " + studentId);
 			}
-			
+
 			Student studentEncontrado = studentOptional.get();
-			
+
 			logger.info("Estudiante encontrado : {}", studentEncontrado);
 			return studentEncontrado;
-			
+
 		} catch (Exception e) {
 			logger.error("ERROR AL ENCONTRADO EL ESTUDIANTE {}", e);
 			throw new RuntimeException("Error al encontrar el estudiante :" + e.getMessage());
 		}
-				
+
 	}
-	
-	//Buscar un estudiante por su apellido
-	//Aca no le agrego la anotacion Query por tanto en el schema como el metodo aca, tienen
-	//el mismo nombre
+
+	// Buscar un estudiante por su apellido
+	// Aca no le agrego la anotacion Query por tanto en el schema como el metodo
+	// aca, tienen
+	// el mismo nombre
 	@QueryMapping(name = "findStudentByLastName")
-	public List<Student> findByLastName(@Argument (name = "lastName") String lastName) {
-		
+	public List<Student> findByLastName(@Argument(name = "lastName") String lastName) {
+
 		try {
-			
+
 			logger.info("Buscando estudiantes con apellido: {}", lastName);
-			
+
 			List<Student> listStudents = studentService.findStudentByLastNombre(lastName);
-			
+
 			if (listStudents.isEmpty()) {
 				logger.error("No existe estudiante(s) con el apellido: {}" + lastName);
 				throw new RuntimeException("No existe estudiante(s) con el apellido: {}" + lastName);
 			}
-			
+
 			logger.info("Estudiante(s) encontrado: {}", listStudents);
-			return listStudents;		
-			
+			return listStudents;
+
 		} catch (Exception e) {
 			logger.error("Error al encontrar al estudiante por su apellido", e);
-			throw new RuntimeException("ERROR AL ENCONTRADO EL ESTUDIANTE"+ e.getMessage());
+			throw new RuntimeException("ERROR AL ENCONTRADO EL ESTUDIANTE" + e.getMessage());
 		}
 	}
-	
-	
 
 	@QueryMapping(name = "findAllStudents")
 	public List<Student> findAll() {
@@ -105,12 +108,12 @@ public class GraphQLStudentController {
 			Optional<Course> courseOptional = courseService.findCourseById(Long.parseLong(inputStudent.getCourseId()));
 
 			if (courseOptional.isEmpty()) {
-				 throw new RuntimeException("Curso no encontrado");
+				throw new RuntimeException("Curso no encontrado");
 			}
 
 			Course courseEncontrado = courseOptional.get();
 
-			//Creando un Estudiante
+			// Creando un Estudiante
 			Student student = new Student();
 			student.setName(inputStudent.getName());
 			student.setLastName(inputStudent.getLastName());
@@ -129,13 +132,48 @@ public class GraphQLStudentController {
 
 	}
 
+	/// Actualizar un estudiante
+	@MutationMapping
+	public Student updateStudent(@Argument InputStudent inputStudent) {
+			
+			try {
+				
+				Optional<Student> studentOptinal = studentService.findStudentById(inputStudent.getId());
+				
+				if (studentOptinal.isEmpty()) {
+					logger.error("Estudiante no encontrado con el id: {}", inputStudent.getCourseId());
+					throw new RuntimeException("Estudiante no encontrado");
+				}
+				
+				Student student = studentOptinal.get(); //→ Obtiene el estudiante existente en la BD.
+				student.setName(inputStudent.getName());
+				student.setLastName(inputStudent.getLastName());
+				student.setEdad(inputStudent.getEdad());
+				
+				Course course = courseRepository.findById(Long.parseLong(inputStudent.getCourseId()))
+						.orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+				
+				student.setCourse(course);
+				
+				studentService.saveStudent(student);
+				
+				logger.info("Estudiante actualizado con exito : {}", student);
+				return student;								
+			
+			} catch (Exception e) {
+				logger.error("Error al actualizar el estudiante ", e);
+				throw new RuntimeException("ERROR AL ACTUALIZAR EL ESTUDIANTE" + e.getMessage());
+			}
+			
+		}
+
 	@MutationMapping(name = "deleteStudentById")
 	public String deleteById(@Argument(name = "studentId") String id) {
 
 		try {
-			
+
 			Optional<Student> studentOptional = studentService.findStudentById(Long.parseLong(id));
-			
+
 			if (studentOptional.isEmpty()) {
 				logger.error("Estudiante no encontrado con el id: {}", id);
 				return "Error al eliminar, estudiante no encontrado con el id: " + id;
