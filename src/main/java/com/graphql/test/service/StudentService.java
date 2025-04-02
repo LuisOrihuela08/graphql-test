@@ -17,6 +17,7 @@ public class StudentService {
 	@Autowired
 	private StudentRepository studentRepository;
 	
+	
 	public List<Student> findAllStudents(){
 		return studentRepository.findAll();
 	}
@@ -37,4 +38,6 @@ public class StudentService {
 	public List<Student> findStudentByLastNombre(String lastName) {
 		return studentRepository.findByLastName(lastName);
 	}
+	
+	
 }
